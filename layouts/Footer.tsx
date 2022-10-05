@@ -2,14 +2,14 @@ import { Box, Button, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const RootStyle = styled(Box)({
-  backgroundColor: "transparent",
-  position: "fixed",
+  backgroundColor: "#000",
   width: "100vw",
-  zIndex: 9999,
+  position: "fixed",
+  botton: 0,
 });
 
 const Container = styled(Grid)({
-  padding: "16px 4%",
+  padding: "16px 2%",
   alignItems: "center",
   justifyContent: "space-between",
 });
@@ -27,7 +27,7 @@ const ButtonStyle = styled(Button)({
   textTransform: "none",
 });
 
-function Header() {
+function Footer() {
   return (
     <RootStyle>
       <Container container spacing={2}>
@@ -39,13 +39,10 @@ function Header() {
           <ButtonStyle>Special Deal</ButtonStyle>
           <ButtonStyle>Community</ButtonStyle>
           <ButtonStyle>About us</ButtonStyle>
-          <ButtonStyle style={{ backgroundColor: "rgba(252, 252, 253, 0.2)" }}>
-            Register
-          </ButtonStyle>
         </Grid>
       </Container>
     </RootStyle>
   );
 }
 
-export default Header;
+export default Footer;
