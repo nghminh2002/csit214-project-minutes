@@ -15,12 +15,20 @@ a {
   box-sizing: border-box;
 }
 
+fieldset {
+  border-width: 0 !important;
+}
+
+div:before {
+  border-bottom: 0 !important;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
+
   body {
-    color: white;
     background: white;
   }
 }
