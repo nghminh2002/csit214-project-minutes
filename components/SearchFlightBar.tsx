@@ -17,7 +17,7 @@ import {
   DateRange,
   DateRangePicker,
 } from "@mui/x-date-pickers-pro/DateRangePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers";
+import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Box } from "@mui/system";
 import Countries from "./CountrySelection";
