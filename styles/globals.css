@@ -16,11 +16,11 @@ a {
 }
 
 fieldset {
-  border-width: 0 !important;
+  border-width: 0;
 }
 
 div:before {
-  border-bottom: 0 !important;
+  border-bottom: 0;
 }
 
 @media (prefers-color-scheme: dark) {
