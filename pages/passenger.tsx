@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Grid, Button, Typography, MenuItem, InputLabel, FormControl, Select } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
@@ -66,14 +66,12 @@ const NextButton = styled(Button)({
 
 function Passenger() {
   const initialValues = { firstName: '', lastName: '', phone: '', mail: '', nation: '', gender: '' }
-  const initialErrors = { firstName: '', lastName: '', phone: '', mail: '', nation: '', gender: '' }
-  const initialErrorStatus = { firstName: false, lastName: false, phone: false, mail: false, nation: false, gender: false }
 
   const [formValues, setFormValues] = useState(initialValues)
-  const [formErrors, setFormErrors] = useState(initialErrors)
-  const [errorStatus, setErrorStatus] = useState(initialErrorStatus)
-  const [isSubmit, setIsSubmit] = useState(false)
+  const [formErrors, setFormErrors] = useState({} as ErrorsType)
 
+  const [firstNameError, setFirstNameError] = useState(false)
+  const [lastNameError, setLastNameError] = useState(false)
   const [phoneError, setPhoneError] = useState(false)
   const [mailError, setMailError] = useState(false)
   const [nationError, setNationError] = useState(false)
@@ -103,32 +101,29 @@ function Passenger() {
   }
 
   const validate = (values: PassengerInfoType) => {
-    const errors: ErrorsType = {
-      firstName: "",
-      lastName: "",
-      phone: "",
-      mail: "",
-      nation: "",
-      gender: ""
-    }
+    const errors: any = {}
     const nameRegex = /^[a-z ,.'-]+$/i
     const phoneRegex = /^[0-9\-\+]{9,15}$/i
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
 
     if (!values.firstName.trim()) {
       errors.firstName = 'Please enter your first name!'
-      setErrorStatus({...errorStatus, firstName: true})
+      setFirstNameError(true)
     } else if (!nameRegex.test(values.firstName)) {
       errors.firstName = 'Invalid name'
-      setErrorStatus({...errorStatus, firstName: true})
+      setFirstNameError(true)
+    } else {
+      setFirstNameError(false)
     }
 
     if (!values.lastName.trim()) {
       errors.lastName = 'Please enter your last name!'
-      setErrorStatus({...errorStatus, lastName: true})
+      setLastNameError(true)
     } else if (!nameRegex.test(values.lastName)) {
       errors.lastName = 'Invalid name'
-      setErrorStatus({...errorStatus, lastName: true})
+      setLastNameError(true)
+    } else {
+      setLastNameError(false)
     }
 
     if (!values.phone.trim()) {
@@ -167,16 +162,8 @@ function Passenger() {
     return errors
   }
 
-  useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-      alert('Successful! Next Step')
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formErrors])
-
   const handleSubmit = () => {
     setFormErrors(validate(formValues))
-    setIsSubmit(true)
   }
 
   return (
@@ -208,7 +195,7 @@ function Passenger() {
                 name="firstName"
                 value={formValues.firstName}
                 onChange={handleFormChange}
-                error={errorStatus.firstName}
+                error={firstNameError}
               />
               <ErrorMessage>{formErrors.firstName}</ErrorMessage>
             </Box>
@@ -229,7 +216,7 @@ function Passenger() {
                 name="lastName"
                 value={formValues.lastName}
                 onChange={handleFormChange}
-                error={errorStatus.lastName}
+                error={lastNameError}
               />
               <ErrorMessage>{formErrors.lastName}</ErrorMessage>
             </Box>

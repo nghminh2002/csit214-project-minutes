@@ -22,15 +22,15 @@ const Banner = styled(Box)({
 
 const Home: NextPage = () => (
   <Box>
-    <Header />
-    <Banner>
-      <TitleBanner />
-    </Banner>
-    <SearchFlightBar />
-    <ExploreVacation />
-    <ExploreExperience />
-    <EveryThingInOnePlace />
-    <Footer />
+  <Header />
+  <Banner>
+    <TitleBanner />
+  </Banner>
+  <SearchFlightBar />
+  <ExploreVacation />
+  <ExploreExperience />
+  <EveryThingInOnePlace />
+  <Footer />
   </Box>
 );
 
