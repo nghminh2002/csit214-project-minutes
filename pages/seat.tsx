@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from "react";
 import { seat_data } from "../data/seat_data";
 import { Box, Button, Grid, Typography } from "@mui/material";
