@@ -1,7 +1,11 @@
 import { Button, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-export default function NextStepBtn() {
+type ButtonType = {
+    handleSubmit: VoidFunction
+}
+
+export default function NextStepBtn(props: ButtonType) {
     const RootStyle = styled(Box)({
         margin:"auto",
         display: "flex",
@@ -39,7 +43,7 @@ export default function NextStepBtn() {
     });
     return (
         <RootStyle>
-            <BootstrapButton>
+            <BootstrapButton onClick={props.handleSubmit}>
                 Next step
             </BootstrapButton>
         </RootStyle>

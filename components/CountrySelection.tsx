@@ -56,6 +56,7 @@ export default function Countries({ setToDes, setFromDes }: any) {
             <ListStyle
               onClick={() => {
                 setFromDes(country);
+                localStorage.setItem("from-destination", country);
               }}
               key={index}
             >
@@ -73,6 +74,7 @@ export default function Countries({ setToDes, setFromDes }: any) {
             <ListStyle
               onClick={() => {
                 setToDes(country);
+                localStorage.setItem("to-destination", country);
               }}
               key={country}
             >
