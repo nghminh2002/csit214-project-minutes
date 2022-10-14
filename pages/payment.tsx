@@ -16,6 +16,11 @@ import {
 } from "@mui/material";
 import { lightBlue } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Banner from "../components/Banner";
+import Router from "next/router";
+import { StepBar } from "../components/StepBar";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -266,6 +271,8 @@ function Payment() {
   const handleSubmit = () => {
     setFormErrors(validate(formValues));
     setIsSubmit(true);
+    localStorage.clear();
+    Router.push("/");
   };
 
   type InfoType = {
@@ -327,337 +334,357 @@ function Payment() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formErrors, isSubmit]);
 
-  return (
-    <BackGround>
-      <Box>
-        <Heading>Payment</Heading>
-        <SubHeading>Choose your payment method</SubHeading>
-      </Box>
-      <Container container spacing={1.5}>
-        <Grid item md={7.5} sm={12}>
-          <LeftContainer>
-            <PaymentHeading>Payment Method</PaymentHeading>
-            <PaymentMethodGrid container spacing={1}>
-              <Grid item xs={12} sm={6}>
-                {selectedValue === "a" ? (
-                  <PaymentMethodCheckedBox>
-                    <PaymentMethod
-                      control={
-                        <Radio
-                          checked={selectedValue === "a"}
-                          onChange={handleChange}
-                          value="a"
-                          name="radio-buttons"
-                          inputProps={{ "aria-label": "A" }}
+  if (typeof window !== "undefined") {
+    const dateFrom = localStorage.getItem("from-date");
+    const dateTo = localStorage.getItem("to-date");
+    const desFrom = localStorage.getItem("from-destination");
+    const desTo = localStorage.getItem("to-destination");
+    return (
+      <Grid sx={{ backgroundColor: "rgb(244,245,246)" }}>
+        <Header page={"payment"} />
+        <Banner />
+        <StepBar />
+        <BackGround>
+          <Box>
+            <Heading>Payment</Heading>
+            <SubHeading>Choose your payment method</SubHeading>
+          </Box>
+          <Container container spacing={1.5}>
+            <Grid item md={7.5} sm={12}>
+              <LeftContainer>
+                <PaymentHeading>Payment Method</PaymentHeading>
+                <PaymentMethodGrid container spacing={1}>
+                  <Grid item xs={12} sm={6}>
+                    {selectedValue === "a" ? (
+                      <PaymentMethodCheckedBox>
+                        <PaymentMethod
+                          control={
+                            <Radio
+                              checked={selectedValue === "a"}
+                              onChange={handleChange}
+                              value="a"
+                              name="radio-buttons"
+                              inputProps={{ "aria-label": "A" }}
+                            />
+                          }
+                          label="Mastercard"
+                          name="payment"
                         />
-                      }
-                      label="Mastercard"
-                      name="payment"
-                    />
-                    <PaymentMethodIcon
-                      src="../paymentPageImg//Mastercard.png"
-                      alt="MasterCard"
-                    />
-                  </PaymentMethodCheckedBox>
-                ) : (
-                  <PaymentMethodUnCheckedBox>
-                    <PaymentMethod
-                      control={
-                        <Radio
-                          checked={selectedValue === "a"}
-                          onChange={handleChange}
-                          value="a"
-                          name="radio-buttons"
-                          inputProps={{ "aria-label": "A" }}
+                        <PaymentMethodIcon
+                          src="../paymentPageImg//Mastercard.png"
+                          alt="MasterCard"
                         />
-                      }
-                      label="Mastercard"
-                      name="payment"
-                    />
-                    <PaymentMethodIcon
-                      src="../paymentPageImg//Mastercard.png"
-                      alt="MasterCard"
-                    />
-                  </PaymentMethodUnCheckedBox>
-                )}
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                {selectedValue === "b" ? (
-                  <PaymentMethodCheckedBox>
-                    <PaymentMethod
-                      control={
-                        <Radio
-                          checked={selectedValue === "b"}
-                          onChange={handleChange}
-                          value="b"
-                          name="radio-buttons"
-                          inputProps={{ "aria-label": "B" }}
+                      </PaymentMethodCheckedBox>
+                    ) : (
+                      <PaymentMethodUnCheckedBox>
+                        <PaymentMethod
+                          control={
+                            <Radio
+                              checked={selectedValue === "a"}
+                              onChange={handleChange}
+                              value="a"
+                              name="radio-buttons"
+                              inputProps={{ "aria-label": "A" }}
+                            />
+                          }
+                          label="Mastercard"
+                          name="payment"
                         />
-                      }
-                      label="Paypal"
-                      name="payment"
-                    />
-                    <PaymentMethodIcon
-                      src="../paymentPageImg/PayPal.png"
-                      alt="PayPal"
-                    />
-                  </PaymentMethodCheckedBox>
-                ) : (
-                  <PaymentMethodUnCheckedBox>
-                    <PaymentMethod
-                      control={
-                        <Radio
-                          checked={selectedValue === "b"}
-                          onChange={handleChange}
-                          value="b"
-                          name="radio-buttons"
-                          inputProps={{ "aria-label": "B" }}
+                        <PaymentMethodIcon
+                          src="../paymentPageImg//Mastercard.png"
+                          alt="MasterCard"
                         />
-                      }
-                      label="Paypal"
-                      name="payment"
-                    />
-                    <PaymentMethodIcon
-                      src="../paymentPageImg/PayPal.png"
-                      alt="PayPal"
-                    />
-                  </PaymentMethodUnCheckedBox>
-                )}
-              </Grid>
-            </PaymentMethodGrid>
-            <InfoBox>
-              <PaymentHeading>Payment Information</PaymentHeading>
-              <Grid container>
-                <Grid xs={12}>
-                  <InfoTextFieldBox>
-                    <InfoTextField>
-                      <InputIconBox>
-                        <InputIcon
-                          src={"../paymentPageImg/email.png"}
-                          alt="email"
+                      </PaymentMethodUnCheckedBox>
+                    )}
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    {selectedValue === "b" ? (
+                      <PaymentMethodCheckedBox>
+                        <PaymentMethod
+                          control={
+                            <Radio
+                              checked={selectedValue === "b"}
+                              onChange={handleChange}
+                              value="b"
+                              name="radio-buttons"
+                              inputProps={{ "aria-label": "B" }}
+                            />
+                          }
+                          label="Paypal"
+                          name="payment"
                         />
-                      </InputIconBox>
-                      <InputBasePadding
-                        sx={{ ml: 1, flex: 1 }}
-                        placeholder="Email"
-                        inputProps={{ "aria-label": "Email" }}
-                        name="mail"
-                        value={formValues.mail}
-                        onChange={handleFormChange}
-                      />
-                    </InfoTextField>
-                    <ErrorMessage>{formErrors.mail}</ErrorMessage>
-                  </InfoTextFieldBox>
-                </Grid>
-                <Grid xs={12}>
-                  <InfoTextFieldBox>
-                    <InfoTextField className="info_textfield">
-                      <InputIconBox>
-                        <InputIcon
-                          src={"../paymentPageImg/Card.png"}
-                          alt="card"
+                        <PaymentMethodIcon
+                          src="../paymentPageImg/PayPal.png"
+                          alt="PayPal"
                         />
-                      </InputIconBox>
-                      {selectedValue === "a" ? (
-                        <InputBasePadding
-                          sx={{ ml: 1, flex: 1 }}
-                          placeholder="Card Number"
-                          inputProps={{ "aria-label": "Card Number" }}
-                          name="card"
-                          value={formValues.card}
-                          onChange={handleFormChange}
+                      </PaymentMethodCheckedBox>
+                    ) : (
+                      <PaymentMethodUnCheckedBox>
+                        <PaymentMethod
+                          control={
+                            <Radio
+                              checked={selectedValue === "b"}
+                              onChange={handleChange}
+                              value="b"
+                              name="radio-buttons"
+                              inputProps={{ "aria-label": "B" }}
+                            />
+                          }
+                          label="Paypal"
+                          name="payment"
                         />
-                      ) : (
-                        <InputBasePadding
-                          sx={{ ml: 1, flex: 1 }}
-                          placeholder="Paypal Number"
-                          inputProps={{ "aria-label": "Paypal Number" }}
-                          name="card"
-                          value={formValues.card}
-                          onChange={handleFormChange}
+                        <PaymentMethodIcon
+                          src="../paymentPageImg/PayPal.png"
+                          alt="PayPal"
                         />
-                      )}
-                    </InfoTextField>
-                    <ErrorMessage>{formErrors.card}</ErrorMessage>
-                  </InfoTextFieldBox>
-                </Grid>
-                <Grid xs={5.9} marginRight={{ xs: "1.5%" }}>
-                  <FlexBox>
-                    <InfoTextField>
-                      <InputIconBox>
-                        <InputIcon
-                          src={"../paymentPageImg/Calendar.png"}
-                          alt="card"
-                        />
-                      </InputIconBox>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <MobileDatePicker
-                          inputFormat="MM/YYYY"
-                          toolbarPlaceholder="MM/YYYY"
-                          value={value}
-                          onChange={handleDateChange}
-                          renderInput={(params) => (
-                            <TimeTextField
-                              variant="standard"
-                              placeholder="MM/YYYY"
-                              {...params}
+                      </PaymentMethodUnCheckedBox>
+                    )}
+                  </Grid>
+                </PaymentMethodGrid>
+                <InfoBox>
+                  <PaymentHeading>Payment Information</PaymentHeading>
+                  <Grid container>
+                    <Grid xs={12}>
+                      <InfoTextFieldBox>
+                        <InfoTextField>
+                          <InputIconBox>
+                            <InputIcon
+                              src={"../paymentPageImg/email.png"}
+                              alt="email"
+                            />
+                          </InputIconBox>
+                          <InputBasePadding
+                            sx={{ ml: 1, flex: 1 }}
+                            placeholder="Email"
+                            inputProps={{ "aria-label": "Email" }}
+                            name="mail"
+                            value={formValues.mail}
+                            onChange={handleFormChange}
+                          />
+                        </InfoTextField>
+                        <ErrorMessage>{formErrors.mail}</ErrorMessage>
+                      </InfoTextFieldBox>
+                    </Grid>
+                    <Grid xs={12}>
+                      <InfoTextFieldBox>
+                        <InfoTextField className="info_textfield">
+                          <InputIconBox>
+                            <InputIcon
+                              src={"../paymentPageImg/Card.png"}
+                              alt="card"
+                            />
+                          </InputIconBox>
+                          {selectedValue === "a" ? (
+                            <InputBasePadding
+                              sx={{ ml: 1, flex: 1 }}
+                              placeholder="Card Number"
+                              inputProps={{ "aria-label": "Card Number" }}
+                              name="card"
+                              value={formValues.card}
+                              onChange={handleFormChange}
+                            />
+                          ) : (
+                            <InputBasePadding
+                              sx={{ ml: 1, flex: 1 }}
+                              placeholder="Paypal Number"
+                              inputProps={{ "aria-label": "Paypal Number" }}
+                              name="card"
+                              value={formValues.card}
+                              onChange={handleFormChange}
                             />
                           )}
-                          InputProps={{
-                            disableUnderline: true,
-                          }}
-                        />
-                      </LocalizationProvider>
-                    </InfoTextField>
+                        </InfoTextField>
+                        <ErrorMessage>{formErrors.card}</ErrorMessage>
+                      </InfoTextFieldBox>
+                    </Grid>
+                    <Grid xs={5.9} marginRight={{ xs: "1.5%" }}>
+                      <FlexBox>
+                        <InfoTextField>
+                          <InputIconBox>
+                            <InputIcon
+                              src={"../paymentPageImg/Calendar.png"}
+                              alt="card"
+                            />
+                          </InputIconBox>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <MobileDatePicker
+                              inputFormat="MM/YYYY"
+                              toolbarPlaceholder="MM/YYYY"
+                              value={value}
+                              onChange={handleDateChange}
+                              renderInput={(params) => (
+                                <TimeTextField
+                                  variant="standard"
+                                  placeholder="MM/YYYY"
+                                  {...params}
+                                />
+                              )}
+                              InputProps={{
+                                disableUnderline: true,
+                              }}
+                            />
+                          </LocalizationProvider>
+                        </InfoTextField>
+                      </FlexBox>
+                      <ErrorMessage>{formErrors.date}</ErrorMessage>
+                    </Grid>
+                    <Grid xs={5.9}>
+                      <InfoTextField>
+                        <InputIconBox>
+                          <InputIcon
+                            src={"../paymentPageImg/lock.png"}
+                            alt="lock"
+                          />
+                        </InputIconBox>
+                        {selectedValue === "a" ? (
+                          <InputBasePadding
+                            sx={{ ml: 1, flex: 1 }}
+                            placeholder="CVC"
+                            type="password"
+                            inputProps={{ "aria-label": "CVC" }}
+                            name="password"
+                            value={formValues.password}
+                            onChange={handleFormChange}
+                          />
+                        ) : (
+                          <InputBasePadding
+                            sx={{ ml: 1, flex: 1 }}
+                            placeholder="Password"
+                            type="password"
+                            inputProps={{ "aria-label": "Password" }}
+                            name="password"
+                            value={formValues.password}
+                            onChange={handleFormChange}
+                          />
+                        )}
+                      </InfoTextField>
+                      <ErrorMessage>{formErrors.password}</ErrorMessage>
+                    </Grid>
+                  </Grid>
+                </InfoBox>
+                <ConfirmedBox>
+                  <Checkbox
+                    id="Terms_Conditions"
+                    {...label}
+                    sx={{
+                      "&.Mui-checked": {
+                        color: lightBlue[800],
+                      },
+                    }}
+                    checked={checked}
+                    onClick={handleChecked}
+                    style={{ top: "-10px" }}
+                  />
+                  <InfoLabel htmlFor="Terms_Conditions">
+                    <strong>Terms and conditions:</strong> Lorem Ipsum is simply
+                    dummy text of the printing and typesetting industry. Lorem
+                    Ipsum has been the industry`&#39;`s standard dummy text ever
+                    since the 1500s.
+                  </InfoLabel>
+                </ConfirmedBox>
+                <ErrorMessage>{checkErrText}</ErrorMessage>
+                <PaymentButton onClick={handleSubmit}>Payment</PaymentButton>
+              </LeftContainer>
+            </Grid>
+            <Grid item md={4.5} sm={12}>
+              <Box>
+                <RightContainer>
+                  <ContainerHeading>Price Summary</ContainerHeading>
+                  <DepartureBox>
+                    <Grid container spacing={1}>
+                      <Grid item>
+                        <RightHighlightedHeading>
+                          Departing
+                        </RightHighlightedHeading>
+                      </Grid>
+                      <Grid item>
+                        <PaymentHeading>07:05, {dateFrom}</PaymentHeading>
+                      </Grid>
+                    </Grid>
+                    <Box>
+                      <InfoDetailBox>
+                        <RightSubHeading style={{ marginRight: "20px" }}>
+                          From:{" "}
+                        </RightSubHeading>
+                        <RightInfo>{desFrom} ( MAN )</RightInfo>
+                      </InfoDetailBox>
+                      <InfoDetailBox>
+                        <RightSubHeading style={{ marginRight: "40px" }}>
+                          To:{" "}
+                        </RightSubHeading>
+                        <RightInfo>{desTo} ( NTL )</RightInfo>
+                      </InfoDetailBox>
+                      <InfoDetailBox>
+                        <RightSubHeading style={{ marginRight: "25px" }}>
+                          Seat:{" "}
+                        </RightSubHeading>
+                        <RightHighlightedInfo>C6</RightHighlightedInfo>
+                      </InfoDetailBox>
+                      <InfoDetailBox>
+                        <RightSubHeading>Food & Drink: </RightSubHeading>
+                        <RightHighlightedInfo>
+                          Meat and vegetable - Strawberry{" "}
+                        </RightHighlightedInfo>
+                      </InfoDetailBox>
+                    </Box>
+                  </DepartureBox>
+                  <DepartureBox style={{ borderBottom: "1px solid #E6E8EC" }}>
+                    <Grid container spacing={1}>
+                      <Grid item>
+                        <RightHighlightedHeading>
+                          Returning
+                        </RightHighlightedHeading>
+                      </Grid>
+                      <Grid item>
+                        <PaymentHeading>10:35, {dateTo}</PaymentHeading>
+                      </Grid>
+                    </Grid>
+                    <Box>
+                      <InfoDetailBox>
+                        <RightSubHeading style={{ marginRight: "20px" }}>
+                          From:{" "}
+                        </RightSubHeading>
+                        <RightInfo>{desTo} ( MAN )</RightInfo>
+                      </InfoDetailBox>
+                      <InfoDetailBox>
+                        <RightSubHeading style={{ marginRight: "40px" }}>
+                          To:{" "}
+                        </RightSubHeading>
+                        <RightInfo>{desFrom} ( NTL )</RightInfo>
+                      </InfoDetailBox>
+                      <InfoDetailBox>
+                        <RightSubHeading style={{ marginRight: "25px" }}>
+                          Seat:{" "}
+                        </RightSubHeading>
+                        <RightHighlightedInfo>A6</RightHighlightedInfo>
+                      </InfoDetailBox>
+                      <InfoDetailBox>
+                        <RightSubHeading>Food & Drink: </RightSubHeading>
+                        <RightHighlightedInfo>
+                          Meat and vegetable - Stawberry{" "}
+                        </RightHighlightedInfo>
+                      </InfoDetailBox>
+                    </Box>
+                  </DepartureBox>
+                  <FlexBox style={{ justifyContent: "space-between" }}>
+                    <PaymentHeading
+                      paddingTop={{ lg: "8%", md: "2.5%", sm: "4%" }}
+                    >
+                      Trip Total
+                    </PaymentHeading>
+                    <Money paddingTop={{ lg: "6%", md: "0" }}>100 AUD</Money>
                   </FlexBox>
-                  <ErrorMessage>{formErrors.date}</ErrorMessage>
-                </Grid>
-                <Grid xs={5.9}>
-                  <InfoTextField>
-                    <InputIconBox>
-                      <InputIcon
-                        src={"../paymentPageImg/lock.png"}
-                        alt="lock"
-                      />
-                    </InputIconBox>
-                    {selectedValue === "a" ? (
-                      <InputBasePadding
-                        sx={{ ml: 1, flex: 1 }}
-                        placeholder="CVC"
-                        type="password"
-                        inputProps={{ "aria-label": "CVC" }}
-                        name="password"
-                        value={formValues.password}
-                        onChange={handleFormChange}
-                      />
-                    ) : (
-                      <InputBasePadding
-                        sx={{ ml: 1, flex: 1 }}
-                        placeholder="Password"
-                        type="password"
-                        inputProps={{ "aria-label": "Password" }}
-                        name="password"
-                        value={formValues.password}
-                        onChange={handleFormChange}
-                      />
-                    )}
-                  </InfoTextField>
-                  <ErrorMessage>{formErrors.password}</ErrorMessage>
-                </Grid>
-              </Grid>
-            </InfoBox>
-            <ConfirmedBox>
-              <Checkbox
-                id="Terms_Conditions"
-                {...label}
-                sx={{
-                  "&.Mui-checked": {
-                    color: lightBlue[800],
-                  },
-                }}
-                checked={checked}
-                onClick={handleChecked}
-                style={{ top: "-10px" }}
-              />
-              <InfoLabel htmlFor="Terms_Conditions">
-                <strong>Terms and conditions:</strong> Lorem Ipsum is simply
-                dummy text of the printing and typesetting industry. Lorem Ipsum
-                has been the industry&#39;s standard dummy text ever since the
-                1500s.
-              </InfoLabel>
-            </ConfirmedBox>
-            <ErrorMessage>{checkErrText}</ErrorMessage>
-            <PaymentButton onClick={handleSubmit}>Payment</PaymentButton>
-          </LeftContainer>
-        </Grid>
-        <Grid item md={4.5} sm={12}>
-          <Box>
-            <RightContainer>
-              <ContainerHeading>Price Summary</ContainerHeading>
-              <DepartureBox>
-                <Grid container spacing={1}>
-                  <Grid item>
-                    <RightHighlightedHeading>Departing</RightHighlightedHeading>
-                  </Grid>
-                  <Grid item>
-                    <PaymentHeading>07:05, 08/10/2022</PaymentHeading>
-                  </Grid>
-                </Grid>
-                <Box>
-                  <InfoDetailBox>
-                    <RightSubHeading style={{ marginRight: "20px" }}>
-                      From:{" "}
-                    </RightSubHeading>
-                    <RightInfo>Myanmar ( MAN )</RightInfo>
-                  </InfoDetailBox>
-                  <InfoDetailBox>
-                    <RightSubHeading style={{ marginRight: "40px" }}>
-                      To:{" "}
-                    </RightSubHeading>
-                    <RightInfo>Netherland ( NTL )</RightInfo>
-                  </InfoDetailBox>
-                  <InfoDetailBox>
-                    <RightSubHeading style={{ marginRight: "25px" }}>
-                      Seat:{" "}
-                    </RightSubHeading>
-                    <RightHighlightedInfo>C6 - A6</RightHighlightedInfo>
-                  </InfoDetailBox>
-                  <InfoDetailBox>
-                    <RightSubHeading>Food & Drink: </RightSubHeading>
-                    <RightHighlightedInfo>
-                      Meat and vegetable - Strawberry{" "}
-                    </RightHighlightedInfo>
-                  </InfoDetailBox>
-                </Box>
-              </DepartureBox>
-              <DepartureBox style={{ borderBottom: "1px solid #E6E8EC" }}>
-                <Grid container spacing={1}>
-                  <Grid item>
-                    <RightHighlightedHeading>Returning</RightHighlightedHeading>
-                  </Grid>
-                  <Grid item>
-                    <PaymentHeading>07:05, 08/10/2022</PaymentHeading>
-                  </Grid>
-                </Grid>
-                <Box>
-                  <InfoDetailBox>
-                    <RightSubHeading style={{ marginRight: "20px" }}>
-                      From:{" "}
-                    </RightSubHeading>
-                    <RightInfo>Myanmar ( MAN )</RightInfo>
-                  </InfoDetailBox>
-                  <InfoDetailBox>
-                    <RightSubHeading style={{ marginRight: "40px" }}>
-                      To:{" "}
-                    </RightSubHeading>
-                    <RightInfo>Netherland ( NTL )</RightInfo>
-                  </InfoDetailBox>
-                  <InfoDetailBox>
-                    <RightSubHeading style={{ marginRight: "25px" }}>
-                      Seat:{" "}
-                    </RightSubHeading>
-                    <RightHighlightedInfo>C6 - A6</RightHighlightedInfo>
-                  </InfoDetailBox>
-                  <InfoDetailBox>
-                    <RightSubHeading>Food & Drink: </RightSubHeading>
-                    <RightHighlightedInfo>
-                      Meat and vegetable - Stawberry{" "}
-                    </RightHighlightedInfo>
-                  </InfoDetailBox>
-                </Box>
-              </DepartureBox>
-              <FlexBox style={{ justifyContent: "space-between" }}>
-                <PaymentHeading paddingTop={{ lg: "8%", md: "2.5%", sm: "4%" }}>
-                  Trip Total
-                </PaymentHeading>
-                <Money paddingTop={{ lg: "6%", md: "0" }}>100 AUD</Money>
-              </FlexBox>
-            </RightContainer>
-          </Box>
-        </Grid>
-      </Container>
-    </BackGround>
-  );
+                </RightContainer>
+              </Box>
+            </Grid>
+          </Container>
+        </BackGround>
+        <Footer />
+      </Grid>
+    );
+  } else {
+    return null;
+  }
 }
 
 export default Payment;

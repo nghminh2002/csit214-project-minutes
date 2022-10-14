@@ -19,7 +19,7 @@ const LogoStyle = styled("img")({
 
 const ButtonStyle = styled(Button)({
   backgroundColor: "transparent",
-  fontSize: "16px",
+  fontSize: "clamp(0.875rem, 1.25rem, 1.5rem)",
   fontWeight: 500,
   color: "#FFFFFF",
   textTransform: "none",
@@ -28,7 +28,7 @@ const ButtonStyle = styled(Button)({
 function Footer() {
   return (
     <RootStyle>
-      <Container container spacing={2}>
+      <Container container spacing={1}>
         <Grid>
           <LogoStyle src="/Logo.svg" alt="logo" />
         </Grid>

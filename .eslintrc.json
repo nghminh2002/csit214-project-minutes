@@ -1,3 +1,48 @@
 {
-  "extends": "next/core-web-vitals"
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "next/core-web-vitals",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "rules": {
+      "arrow-body-style": 1,
+      "no-console": ["warn", { "allow": ["warn", "error"] }],
+      "react/display-name": 0,
+      "react/no-children-prop": 0,
+      "react/no-danger": 1,
+      "react/no-deprecated": 1,
+      "react/no-unescaped-entities": 0,
+      "react/self-closing-comp": 1,
+      "import/no-duplicates": 1,
+      "import/no-useless-path-segments": 1,
+      "@next/next/no-img-element": 0,
+      "@next/no-typos": 0,
+      "@typescript-eslint/ban-ts-comment": 0,
+      "@typescript-eslint/explicit-module-boundary-types": 0,
+      "@typescript-eslint/no-explicit-any": 0,
+      "@typescript-eslint/no-empty-function": 1,
+      "@typescript-eslint/no-non-null-assertion": 0,
+      "@typescript-eslint/no-unused-vars": [
+        1,
+        {
+          "vars": "all",
+          "args": "none"
+        }
+      ]
+    }
 }

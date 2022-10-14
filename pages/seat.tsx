@@ -3,6 +3,10 @@ import React, { useEffect, useState } from "react";
 import { seat_data } from "../data/seat_data";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Router from "next/router";
+import { StepBar } from "../components/StepBar";
 
 const BackGround = styled(Box)({
   backgroundColor: "rgb(244,245,246)",
@@ -32,7 +36,7 @@ const SeatHeading = styled(Box)({
   color: "#4669CD",
   fontSize: "32px",
   fontWeight: "600",
-  padding: "30px 0 15px 0%",
+  padding: "15px 0px",
 });
 
 const SubHeading = styled(Typography)({
@@ -157,7 +161,15 @@ const FlexBox = styled(Box)({
   display: "flex",
 });
 
-const NextButton = styled(Button)({});
+const Banner = styled(Box)({
+  backgroundImage: "url(/BookFlightBanner.svg)",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "cover",
+  backdropFilter: "blur(2px)",
+  height: "700px",
+  position: "relative",
+});
 
 function Seat() {
   const [data, setData] = useState(seat_data);
@@ -190,613 +202,698 @@ function Seat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSeatArray]);
 
+  let flightCode;
+  if (typeof window !== "undefined") {
+    flightCode = localStorage.getItem("flightNumber");
+  } else {
+    flightCode = 1;
+  }
+
+  const generateForm = () => {
+    if (typeof window !== "undefined") {
+      const list = [];
+      const numberOfPassenger = localStorage.getItem("number-of-people");
+      if (numberOfPassenger != undefined || numberOfPassenger != null) {
+        for (let i = 0; i < parseInt(numberOfPassenger); i++) {
+          list.push(i);
+        }
+        return list.map((i) => (
+          <Container key={`item-${i}`}>
+            <Grid container>
+              <Grid item md={4.3} xs={12}>
+                <UpperBox>
+                  <ContainerHeading>Passenger {i + 1}</ContainerHeading>
+                  <InfoText>Full name : </InfoText>
+                  <InfoText>Phone Number : </InfoText>
+                  <InfoText>Gmail : </InfoText>
+                </UpperBox>
+                <YourSelectedBox marginBottom={{ xs: "10%", md: "60%" }}>
+                  <ContainerHeading>Your Selected : </ContainerHeading>
+                  {selectedSeatArray.map((selectedSeat, index) => (
+                    <SeatSelectedText key={index}>
+                      {selectedSeat}
+                    </SeatSelectedText>
+                  ))}
+                </YourSelectedBox>
+                <Box>
+                  <Grid container>
+                    <Grid item xs={2}>
+                      <SeatIcons
+                        page={{
+                          NotAvailableIcon: true,
+                          CanChooseIcon: false,
+                          YourSelectedIcon: false,
+                        }}
+                      >
+                        <CenterIcon>
+                          <img src={"../seatImg/close.svg"} alt="close" />
+                        </CenterIcon>
+                      </SeatIcons>
+                    </Grid>
+                    <Grid>
+                      <LowerInfoText>Not Available</LowerInfoText>
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid item xs={2}>
+                      <SeatIcons
+                        page={{
+                          NotAvailableIcon: false,
+                          CanChooseIcon: true,
+                          YourSelectedIcon: false,
+                        }}
+                      >
+                        <CenterIcon>
+                          <img src={"../seatImg/SmallPerson.png"} alt="close" />
+                        </CenterIcon>
+                      </SeatIcons>
+                    </Grid>
+                    <Grid>
+                      <LowerInfoText>Can Choose</LowerInfoText>
+                    </Grid>
+                  </Grid>
+                  <Grid container>
+                    <Grid item xs={2}>
+                      <SeatIcons
+                        page={{
+                          NotAvailableIcon: false,
+                          CanChooseIcon: false,
+                          YourSelectedIcon: true,
+                        }}
+                      >
+                        <CenterIcon>
+                          <img src={"../seatImg/SmallPerson.png"} alt="close" />
+                        </CenterIcon>
+                      </SeatIcons>
+                    </Grid>
+                    <Grid>
+                      <LowerInfoText>Your Selected</LowerInfoText>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Grid>
+              <Grid item md={7.7} xs={12}>
+                <SeatContainer>
+                  <SeatGrid container spacing={1}>
+                    <Grid
+                      item
+                      xs={2.7}
+                      sm={1.5}
+                      md={1.5}
+                      lg={1.5}
+                      xl={1}
+                      marginRight={{ xl: "4%" }}
+                    >
+                      <SeatColumn item>A</SeatColumn>
+                      {data
+                        .filter((el: { column: string }) => el.column === "A")
+                        .map(
+                          (
+                            seat: {
+                              id: any;
+                              status: any;
+                              name: any;
+                              column: any;
+                            },
+                            index: React.Key | null | undefined
+                          ) => {
+                            const { id, status, name, column } = seat;
+                            switch (status) {
+                              case 0:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: true,
+                                      SeatCanChoose: false,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    disabled
+                                  >
+                                    <img
+                                      src={"../seatImg/close.svg"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 1:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: true,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 2:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: false,
+                                      SeatSelected: true,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                            }
+                          }
+                        )}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={2.7}
+                      sm={1.5}
+                      md={1.5}
+                      lg={1.5}
+                      xl={1}
+                      marginRight={{ xl: "4%" }}
+                      className="col_B"
+                    >
+                      <SeatColumn>B</SeatColumn>
+                      {data
+                        .filter((el: { column: string }) => el.column === "B")
+                        .map(
+                          (
+                            seat: {
+                              id: any;
+                              status: any;
+                              name: any;
+                              column: any;
+                            },
+                            index: React.Key | null | undefined
+                          ) => {
+                            const { id, status, name, column } = seat;
+                            switch (status) {
+                              case 0:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: true,
+                                      SeatCanChoose: false,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    disabled
+                                  >
+                                    <img
+                                      src={"../seatImg/close.svg"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 1:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: true,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 2:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: false,
+                                      SeatSelected: true,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                            }
+                          }
+                        )}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={2.7}
+                      sm={1.5}
+                      md={1.5}
+                      lg={1.5}
+                      xl={1}
+                      marginRight={{ xl: "4%" }}
+                      className="col_C"
+                    >
+                      <SeatColumn>C</SeatColumn>
+                      {data
+                        .filter((el: { column: string }) => el.column === "C")
+                        .map(
+                          (
+                            seat: {
+                              id: any;
+                              status: any;
+                              name: any;
+                              column: any;
+                            },
+                            index: React.Key | null | undefined
+                          ) => {
+                            const { id, status, name, column } = seat;
+                            switch (status) {
+                              case 0:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: true,
+                                      SeatCanChoose: false,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    disabled
+                                  >
+                                    <img
+                                      src={"../seatImg/close.svg"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 1:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: true,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 2:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: false,
+                                      SeatSelected: true,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                            }
+                          }
+                        )}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={0}
+                      sm={1.5}
+                      md={1.5}
+                      lg={1.5}
+                      xl={1}
+                      marginRight={{ xl: "4%" }}
+                      className="row"
+                    >
+                      <SeatRow style={{ marginTop: "75px" }}>1</SeatRow>
+                      <SeatRow>2</SeatRow>
+                      <SeatRow>3</SeatRow>
+                      <SeatRow>4</SeatRow>
+                      <SeatRow>5</SeatRow>
+                      <SeatRow>6</SeatRow>
+                      <SeatRow>7</SeatRow>
+                      <SeatRow>8</SeatRow>
+                      <SeatRow>9</SeatRow>
+                      <SeatRow>10</SeatRow>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={2.7}
+                      sm={1.5}
+                      md={1.5}
+                      lg={1.5}
+                      xl={1}
+                      marginRight={{ xl: "4%" }}
+                      className="col_D"
+                    >
+                      <SeatColumn>D</SeatColumn>
+                      {data
+                        .filter((el: { column: string }) => el.column === "D")
+                        .map(
+                          (
+                            seat: {
+                              id: any;
+                              status: any;
+                              name: any;
+                              column: any;
+                            },
+                            index: React.Key | null | undefined
+                          ) => {
+                            const { id, status, name, column } = seat;
+                            switch (status) {
+                              case 0:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: true,
+                                      SeatCanChoose: false,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    disabled
+                                  >
+                                    <img
+                                      src={"../seatImg/close.svg"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 1:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: true,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 2:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: false,
+                                      SeatSelected: true,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                            }
+                          }
+                        )}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={2.7}
+                      sm={1.5}
+                      md={1.5}
+                      lg={1.5}
+                      xl={1}
+                      marginRight={{ xl: "4%" }}
+                      className="col_E"
+                    >
+                      <SeatColumn>E</SeatColumn>
+                      {data
+                        .filter((el: { column: string }) => el.column === "E")
+                        .map(
+                          (
+                            seat: {
+                              id: any;
+                              status: any;
+                              name: any;
+                              column: any;
+                            },
+                            index: React.Key | null | undefined
+                          ) => {
+                            const { id, status, name, column } = seat;
+                            switch (status) {
+                              case 0:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: true,
+                                      SeatCanChoose: false,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    disabled
+                                  >
+                                    <img
+                                      src={"../seatImg/close.svg"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 1:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: true,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 2:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: false,
+                                      SeatSelected: true,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                            }
+                          }
+                        )}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={2.7}
+                      sm={1.5}
+                      md={1.5}
+                      lg={1.5}
+                      xl={1}
+                      marginRight={{ xl: "4%" }}
+                      className="col_F"
+                    >
+                      <SeatColumn>F</SeatColumn>
+                      {data
+                        .filter((el: { column: string }) => el.column === "F")
+                        .map(
+                          (
+                            seat: {
+                              id: any;
+                              status: any;
+                              name: any;
+                              column: any;
+                            },
+                            index: React.Key | null | undefined
+                          ) => {
+                            const { id, status, name, column } = seat;
+                            switch (status) {
+                              case 0:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: true,
+                                      SeatCanChoose: false,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    disabled
+                                  >
+                                    <img
+                                      src={"../seatImg/close.svg"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 1:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: true,
+                                      SeatSelected: false,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                              case 2:
+                                return (
+                                  <SeatSelections
+                                    page={{
+                                      SeatUnvailable: false,
+                                      SeatCanChoose: false,
+                                      SeatSelected: true,
+                                    }}
+                                    key={index}
+                                    value={name}
+                                    onClick={() => {
+                                      handleSeat(id, status, name, column);
+                                    }}
+                                  >
+                                    <img
+                                      src={"../seatImg/BigPerson.png"}
+                                      alt="close"
+                                    />
+                                  </SeatSelections>
+                                );
+                            }
+                          }
+                        )}
+                    </Grid>
+                    <Grid
+                      item
+                      xs={0}
+                      sm={1.5}
+                      md={1.5}
+                      lg={1.5}
+                      xl={1}
+                      display={{ md: "none", xs: "block" }}
+                    >
+                      <SeatRow style={{ marginTop: "75px" }}>1</SeatRow>
+                      <SeatRow>2</SeatRow>
+                      <SeatRow>3</SeatRow>
+                      <SeatRow>4</SeatRow>
+                      <SeatRow>5</SeatRow>
+                      <SeatRow>6</SeatRow>
+                      <SeatRow>7</SeatRow>
+                      <SeatRow>8</SeatRow>
+                      <SeatRow>9</SeatRow>
+                      <SeatRow>10</SeatRow>
+                    </Grid>
+                  </SeatGrid>
+                </SeatContainer>
+              </Grid>
+            </Grid>
+          </Container>
+        ));
+      }
+    }
+  };
+
+  const handleClick = () => {
+    localStorage.setItem("seat", "done");
+    Router.push("/food-and-drink");
+  };
+
   return (
-    <BackGround>
-      <Box>
-        <SeatHeading>Seat Selection</SeatHeading>
-        <FlexBox>
-          <SubHeading>Select your seat at</SubHeading>
-          <BlueSubHeading>KAP-3469</BlueSubHeading>
-        </FlexBox>
-      </Box>
-      <Container>
-        <Grid container>
-          <Grid item md={4.3} xs={12}>
-            <UpperBox>
-              <ContainerHeading>Passenger 1</ContainerHeading>
-              <InfoText>Full name : </InfoText>
-              <InfoText>Phone Number : </InfoText>
-              <InfoText>Gmail : </InfoText>
-            </UpperBox>
-            <YourSelectedBox marginBottom={{ xs: "10%", md: "60%" }}>
-              <ContainerHeading>Your Selected : </ContainerHeading>
-              {selectedSeatArray.map((selectedSeat, index) => (
-                <SeatSelectedText key={index}>{selectedSeat}</SeatSelectedText>
-              ))}
-            </YourSelectedBox>
-            <Box>
-              <Grid container>
-                <Grid item xs={2}>
-                  <SeatIcons
-                    page={{
-                      NotAvailableIcon: true,
-                      CanChooseIcon: false,
-                      YourSelectedIcon: false,
-                    }}
-                  >
-                    <CenterIcon>
-                      <img src={"../seatImg/close.svg"} alt="close" />
-                    </CenterIcon>
-                  </SeatIcons>
-                </Grid>
-                <Grid>
-                  <LowerInfoText>Not Available</LowerInfoText>
-                </Grid>
-              </Grid>
-              <Grid container>
-                <Grid item xs={2}>
-                  <SeatIcons
-                    page={{
-                      NotAvailableIcon: false,
-                      CanChooseIcon: true,
-                      YourSelectedIcon: false,
-                    }}
-                  >
-                    <CenterIcon>
-                      <img src={"../seatImg/SmallPerson.png"} alt="close" />
-                    </CenterIcon>
-                  </SeatIcons>
-                </Grid>
-                <Grid>
-                  <LowerInfoText>Can Choose</LowerInfoText>
-                </Grid>
-              </Grid>
-              <Grid container>
-                <Grid item xs={2}>
-                  <SeatIcons
-                    page={{
-                      NotAvailableIcon: false,
-                      CanChooseIcon: false,
-                      YourSelectedIcon: true,
-                    }}
-                  >
-                    <CenterIcon>
-                      <img src={"../seatImg/SmallPerson.png"} alt="close" />
-                    </CenterIcon>
-                  </SeatIcons>
-                </Grid>
-                <Grid>
-                  <LowerInfoText>Your Selected</LowerInfoText>
-                </Grid>
-              </Grid>
-            </Box>
-          </Grid>
-          <Grid item md={7.7} xs={12}>
-            <SeatContainer>
-              <SeatGrid container spacing={1}>
-                <Grid
-                  item
-                  xs={2.7}
-                  sm={1.5}
-                  md={1.5}
-                  lg={1.5}
-                  xl={1}
-                  marginRight={{ xl: "4%" }}
-                >
-                  <SeatColumn item>A</SeatColumn>
-                  {data
-                    .filter((el: { column: string }) => el.column === "A")
-                    .map(
-                      (
-                        seat: { id: any; status: any; name: any; column: any },
-                        index: React.Key | null | undefined
-                      ) => {
-                        const { id, status, name, column } = seat;
-                        switch (status) {
-                          case 0:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: true,
-                                  SeatCanChoose: false,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                disabled
-                              >
-                                <img src={"../seatImg/close.svg"} alt="close" />
-                              </SeatSelections>
-                            );
-                          case 1:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: true,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                          case 2:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: false,
-                                  SeatSelected: true,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                        }
-                      }
-                    )}
-                </Grid>
-                <Grid
-                  item
-                  xs={2.7}
-                  sm={1.5}
-                  md={1.5}
-                  lg={1.5}
-                  xl={1}
-                  marginRight={{ xl: "4%" }}
-                  className="col_B"
-                >
-                  <SeatColumn>B</SeatColumn>
-                  {data
-                    .filter((el: { column: string }) => el.column === "B")
-                    .map(
-                      (
-                        seat: { id: any; status: any; name: any; column: any },
-                        index: React.Key | null | undefined
-                      ) => {
-                        const { id, status, name, column } = seat;
-                        switch (status) {
-                          case 0:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: true,
-                                  SeatCanChoose: false,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                disabled
-                              >
-                                <img src={"../seatImg/close.svg"} alt="close" />
-                              </SeatSelections>
-                            );
-                          case 1:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: true,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                          case 2:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: false,
-                                  SeatSelected: true,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                        }
-                      }
-                    )}
-                </Grid>
-                <Grid
-                  item
-                  xs={2.7}
-                  sm={1.5}
-                  md={1.5}
-                  lg={1.5}
-                  xl={1}
-                  marginRight={{ xl: "4%" }}
-                  className="col_C"
-                >
-                  <SeatColumn>C</SeatColumn>
-                  {data
-                    .filter((el: { column: string }) => el.column === "C")
-                    .map(
-                      (
-                        seat: { id: any; status: any; name: any; column: any },
-                        index: React.Key | null | undefined
-                      ) => {
-                        const { id, status, name, column } = seat;
-                        switch (status) {
-                          case 0:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: true,
-                                  SeatCanChoose: false,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                disabled
-                              >
-                                <img src={"../seatImg/close.svg"} alt="close" />
-                              </SeatSelections>
-                            );
-                          case 1:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: true,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                          case 2:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: false,
-                                  SeatSelected: true,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                        }
-                      }
-                    )}
-                </Grid>
-                <Grid
-                  item
-                  xs={0}
-                  sm={1.5}
-                  md={1.5}
-                  lg={1.5}
-                  xl={1}
-                  marginRight={{ xl: "4%" }}
-                  className="row"
-                >
-                  <SeatRow style={{ marginTop: "75px" }}>1</SeatRow>
-                  <SeatRow>2</SeatRow>
-                  <SeatRow>3</SeatRow>
-                  <SeatRow>4</SeatRow>
-                  <SeatRow>5</SeatRow>
-                  <SeatRow>6</SeatRow>
-                  <SeatRow>7</SeatRow>
-                  <SeatRow>8</SeatRow>
-                  <SeatRow>9</SeatRow>
-                  <SeatRow>10</SeatRow>
-                </Grid>
-                <Grid
-                  item
-                  xs={2.7}
-                  sm={1.5}
-                  md={1.5}
-                  lg={1.5}
-                  xl={1}
-                  marginRight={{ xl: "4%" }}
-                  className="col_D"
-                >
-                  <SeatColumn>D</SeatColumn>
-                  {data
-                    .filter((el: { column: string }) => el.column === "D")
-                    .map(
-                      (
-                        seat: { id: any; status: any; name: any; column: any },
-                        index: React.Key | null | undefined
-                      ) => {
-                        const { id, status, name, column } = seat;
-                        switch (status) {
-                          case 0:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: true,
-                                  SeatCanChoose: false,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                disabled
-                              >
-                                <img src={"../seatImg/close.svg"} alt="close" />
-                              </SeatSelections>
-                            );
-                          case 1:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: true,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                          case 2:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: false,
-                                  SeatSelected: true,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                        }
-                      }
-                    )}
-                </Grid>
-                <Grid
-                  item
-                  xs={2.7}
-                  sm={1.5}
-                  md={1.5}
-                  lg={1.5}
-                  xl={1}
-                  marginRight={{ xl: "4%" }}
-                  className="col_E"
-                >
-                  <SeatColumn>E</SeatColumn>
-                  {data
-                    .filter((el: { column: string }) => el.column === "E")
-                    .map(
-                      (
-                        seat: { id: any; status: any; name: any; column: any },
-                        index: React.Key | null | undefined
-                      ) => {
-                        const { id, status, name, column } = seat;
-                        switch (status) {
-                          case 0:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: true,
-                                  SeatCanChoose: false,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                disabled
-                              >
-                                <img src={"../seatImg/close.svg"} alt="close" />
-                              </SeatSelections>
-                            );
-                          case 1:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: true,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                          case 2:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: false,
-                                  SeatSelected: true,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                        }
-                      }
-                    )}
-                </Grid>
-                <Grid
-                  item
-                  xs={2.7}
-                  sm={1.5}
-                  md={1.5}
-                  lg={1.5}
-                  xl={1}
-                  marginRight={{ xl: "4%" }}
-                  className="col_F"
-                >
-                  <SeatColumn>F</SeatColumn>
-                  {data
-                    .filter((el: { column: string }) => el.column === "F")
-                    .map(
-                      (
-                        seat: { id: any; status: any; name: any; column: any },
-                        index: React.Key | null | undefined
-                      ) => {
-                        const { id, status, name, column } = seat;
-                        switch (status) {
-                          case 0:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: true,
-                                  SeatCanChoose: false,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                disabled
-                              >
-                                <img src={"../seatImg/close.svg"} alt="close" />
-                              </SeatSelections>
-                            );
-                          case 1:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: true,
-                                  SeatSelected: false,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                          case 2:
-                            return (
-                              <SeatSelections
-                                page={{
-                                  SeatUnvailable: false,
-                                  SeatCanChoose: false,
-                                  SeatSelected: true,
-                                }}
-                                key={index}
-                                value={name}
-                                onClick={() => {
-                                  handleSeat(id, status, name, column);
-                                }}
-                              >
-                                <img
-                                  src={"../seatImg/BigPerson.png"}
-                                  alt="close"
-                                />
-                              </SeatSelections>
-                            );
-                        }
-                      }
-                    )}
-                </Grid>
-                <Grid
-                  item
-                  xs={0}
-                  sm={1.5}
-                  md={1.5}
-                  lg={1.5}
-                  xl={1}
-                  display={{ md: "none", xs: "block" }}
-                >
-                  <SeatRow style={{ marginTop: "75px" }}>1</SeatRow>
-                  <SeatRow>2</SeatRow>
-                  <SeatRow>3</SeatRow>
-                  <SeatRow>4</SeatRow>
-                  <SeatRow>5</SeatRow>
-                  <SeatRow>6</SeatRow>
-                  <SeatRow>7</SeatRow>
-                  <SeatRow>8</SeatRow>
-                  <SeatRow>9</SeatRow>
-                  <SeatRow>10</SeatRow>
-                </Grid>
-              </SeatGrid>
-            </SeatContainer>
-          </Grid>
-        </Grid>
-      </Container>
-      <Box style={{ display: "flex", justifyContent: "flex-end" }}>
-        <NextButton variant="contained">Next Step</NextButton>
-      </Box>
-    </BackGround>
+    <Grid sx={{ backgroundColor: "rgb(244,245,246)" }}>
+      <Header page={"BookFlight"} />
+      <Banner />
+      <StepBar />
+      <BackGround>
+        <Box>
+          <SeatHeading>Seat Selection</SeatHeading>
+          <FlexBox>
+            <SubHeading>Select your seat at</SubHeading>
+            <BlueSubHeading>{flightCode}</BlueSubHeading>
+          </FlexBox>
+        </Box>
+        <Box>{generateForm()}</Box>
+        <Box style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button variant="contained" onClick={() => handleClick()}>
+            Next Step
+          </Button>
+        </Box>
+      </BackGround>
+      <Footer />
+    </Grid>
   );
 }
 
