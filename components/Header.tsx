@@ -1,5 +1,6 @@
 import { Box, Button, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import Link from "next/link";
 
 const RootStyle = styled(Box)(({ page }: HeaderType) => ({
   backgroundColor: page == "homepage" ? "transparent" : "#FFF",
@@ -44,14 +45,15 @@ function Header(props: HeaderType) {
     <RootStyle page={props.page}>
       <Container container spacing={2}>
         <Grid item xs={4}>
-          <a href="/">
+          <Link href="/" passHref={false}>
             <LogoStyle
               src={
                 props.page == "homepage" ? "/Logo.svg" : "/BookFlightLogo.svg"
               }
               alt="logo"
+              style={{ cursor: "pointer" }}
             />
-          </a>
+          </Link>
         </Grid>
         <ButtonContainer item xs={8}>
           <ButtonStyle page={props.page}>Discover</ButtonStyle>
