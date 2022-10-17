@@ -16,35 +16,62 @@ export default function Foodanddrink({ nameFlight = "KAP-3469" }) {
     background: "rgb(244,245,246)",
   });
 
-  const passengerInfor = [
-    {
-      name: "Milly Nguyen",
-      phone: "09123456",
-      email: "millynguyen@gmail.com",
-      menuSelected: [],
-    },
-    {
-      name: "Marry Nguyen",
-      phone: "09123456",
-      email: "marrynguyen@gmail.com",
-      menuSelected: [],
-    },
-  ];
-
-  const handleClick = () => {
-    localStorage.setItem("food-and-drink", "done");
-    Router.push("/payment");
+  type PassengerInfoType = {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    mail: string;
+    nation: string;
+    gender: string;
   };
 
-  return (
-    <RootStyle>
-      <Header page="in-flight services" />
-      <Banner />
-      <StepBar />
-      <HeaderSection nameFlight={nameFlight} />
-      <Menu passengerInfor={passengerInfor} />
-      <NextStepBtn handleSubmit={handleClick} />
-      <Footer />
-    </RootStyle>
-  );
+  if (typeof window !== "undefined") {
+    const passengerInfo = localStorage.getItem("passenger-values");
+    if (passengerInfo !== null && passengerInfo !== undefined) {
+      const initialValues: PassengerInfoType = JSON.parse(passengerInfo);
+      const passengerInfor = [
+        {
+          name: initialValues.firstName + " " + initialValues.lastName,
+          phone: initialValues.phone,
+          email: initialValues.mail,
+          menuSelected: [],
+        },
+      ];
+
+      const handleClick = () => {
+        localStorage.setItem("food-and-drink", "done");
+        Router.push("/payment");
+      };
+
+      return (
+        <RootStyle>
+          <Header page="in-flight services" />
+          <Banner />
+          <StepBar />
+          <HeaderSection nameFlight={nameFlight} />
+          <Menu passengerInfor={passengerInfor} />
+          <NextStepBtn handleSubmit={handleClick} />
+          <Footer />
+        </RootStyle>
+      );
+    } else {
+      return (
+        <RootStyle>
+          <Header page="in-flight services" />
+          <Banner />
+          <Box style={{ height: "20vh" }}>Something wrong is happening.</Box>
+          <Footer />
+        </RootStyle>
+      );
+    }
+  } else {
+    return (
+      <RootStyle>
+        <Header page="in-flight services" />
+        <Banner />
+        <Box style={{ height: "20vh" }}>Something wrong is happening.</Box>
+        <Footer />
+      </RootStyle>
+    );
+  }
 }

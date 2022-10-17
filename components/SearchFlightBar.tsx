@@ -270,7 +270,7 @@ export default function SearchFlightBar() {
           <PeopleInput
             ref={peopleInput}
             id="input-with-icon-adornment"
-            placeholder="eg.2"
+            placeholder="eg.1"
             autoFocus={true}
             value={valuePeople}
             onChange={(val) => {

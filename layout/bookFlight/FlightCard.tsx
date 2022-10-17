@@ -58,8 +58,8 @@ const ButtonStyle = styled(Button)({
   maxHeight: "2.5rem",
   maxWidth: "10rem",
   textTransform: "capitalize",
-  "&hover": {
-    backgroundColor: "rgba(70, 105, 205, 1.5)",
+  ":hover": {
+    backgroundColor: "#23366e",
   },
 });
 
@@ -150,7 +150,7 @@ export default function FlightCard(props: FlightCardType) {
           }}
         >
           <MoneyStyle>456AUD</MoneyStyle>
-          <ButtonStyle onClick={() => handleClick}>Purchase</ButtonStyle>
+          <ButtonStyle onClick={() => handleClick(1)}>Purchase</ButtonStyle>
         </Grid>
       </FlightInfoCard>
       <FlightInfoCard container spacing={1}>

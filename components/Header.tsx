@@ -44,10 +44,14 @@ function Header(props: HeaderType) {
     <RootStyle page={props.page}>
       <Container container spacing={2}>
         <Grid item xs={4}>
-          <LogoStyle
-            src={props.page == "homepage" ? "/Logo.svg" : "/BookFlightLogo.svg"}
-            alt="logo"
-          />
+          <a href="/">
+            <LogoStyle
+              src={
+                props.page == "homepage" ? "/Logo.svg" : "/BookFlightLogo.svg"
+              }
+              alt="logo"
+            />
+          </a>
         </Grid>
         <ButtonContainer item xs={8}>
           <ButtonStyle page={props.page}>Discover</ButtonStyle>

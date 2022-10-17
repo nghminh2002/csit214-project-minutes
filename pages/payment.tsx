@@ -339,6 +339,7 @@ function Payment() {
     const dateTo = localStorage.getItem("to-date");
     const desFrom = localStorage.getItem("from-destination");
     const desTo = localStorage.getItem("to-destination");
+    const seatSelected = localStorage.getItem("seat-selection");
     return (
       <Grid sx={{ backgroundColor: "rgb(244,245,246)" }}>
         <Header page={"payment"} />
@@ -618,7 +619,7 @@ function Payment() {
                         <RightSubHeading style={{ marginRight: "25px" }}>
                           Seat:{" "}
                         </RightSubHeading>
-                        <RightHighlightedInfo>C6</RightHighlightedInfo>
+                        <RightHighlightedInfo>{seatSelected}</RightHighlightedInfo>
                       </InfoDetailBox>
                       <InfoDetailBox>
                         <RightSubHeading>Food & Drink: </RightSubHeading>
@@ -656,7 +657,7 @@ function Payment() {
                         <RightSubHeading style={{ marginRight: "25px" }}>
                           Seat:{" "}
                         </RightSubHeading>
-                        <RightHighlightedInfo>A6</RightHighlightedInfo>
+                        <RightHighlightedInfo>{seatSelected}</RightHighlightedInfo>
                       </InfoDetailBox>
                       <InfoDetailBox>
                         <RightSubHeading>Food & Drink: </RightSubHeading>
