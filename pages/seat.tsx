@@ -8,15 +8,6 @@ import Footer from "../components/Footer";
 import Router from "next/router";
 import { StepBar } from "../components/StepBar";
 
-const BackGround = styled(Box)({
-  backgroundColor: "rgb(244,245,246)",
-  width: "auto",
-  height: "auto",
-  color: "black",
-  maxWidth: "100vw",
-  padding: "8%",
-});
-
 const Container = styled(Box)({
   backgroundColor: "#FFFFFF",
   height: "100%",
@@ -53,7 +44,7 @@ const BlueSubHeading = styled(Typography)({
 });
 
 const InfoText = styled(Box)({
-  fontSize: "16px",
+  fontSize: "clam(0.875rem, 1.25rem, 1.5rem)",
   fontWeight: "400",
   color: "#1A1D1F",
 });
@@ -185,6 +176,7 @@ function Seat() {
   useEffect(() => {
     if (selectedSeatArray.length > 1) {
       setSelectedSeatArray(selectedSeatArray.splice(1, 1));
+      localStorage.setItem("seat-selection", selectedSeatArray[0]);
     }
 
     selectedSeatArray.map((seatName) => {
@@ -209,10 +201,33 @@ function Seat() {
     flightCode = 1;
   }
 
+  type PassengerInfoType = {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    mail: string;
+    nation: string;
+    gender: string;
+  };
+
   const generateForm = () => {
     if (typeof window !== "undefined") {
       const list = [];
       const numberOfPassenger = localStorage.getItem("number-of-people");
+      const passengerValue = localStorage.getItem("passenger-values");
+      let userInfo: PassengerInfoType;
+      if (passengerValue !== undefined && passengerValue !== null) {
+        userInfo = JSON.parse(passengerValue);
+      } else {
+        userInfo = {
+          firstName: "",
+          lastName: "",
+          phone: "",
+          mail: "",
+          nation: "",
+          gender: "",
+        };
+      }
       if (numberOfPassenger != undefined || numberOfPassenger != null) {
         for (let i = 0; i < parseInt(numberOfPassenger); i++) {
           list.push(i);
@@ -223,9 +238,11 @@ function Seat() {
               <Grid item md={4.3} xs={12}>
                 <UpperBox>
                   <ContainerHeading>Passenger {i + 1}</ContainerHeading>
-                  <InfoText>Full name : </InfoText>
-                  <InfoText>Phone Number : </InfoText>
-                  <InfoText>Gmail : </InfoText>
+                  <InfoText>
+                    Full name : {userInfo.firstName} {userInfo.lastName}
+                  </InfoText>
+                  <InfoText>Phone Number : {userInfo.phone}</InfoText>
+                  <InfoText>Gmail : {userInfo.mail}</InfoText>
                 </UpperBox>
                 <YourSelectedBox marginBottom={{ xs: "10%", md: "60%" }}>
                   <ContainerHeading>Your Selected : </ContainerHeading>
@@ -877,7 +894,7 @@ function Seat() {
       <Header page={"BookFlight"} />
       <Banner />
       <StepBar />
-      <BackGround>
+      <Box style={{ margin: "4% 8%" }}>
         <Box>
           <SeatHeading>Seat Selection</SeatHeading>
           <FlexBox>
@@ -891,7 +908,7 @@ function Seat() {
             Next Step
           </Button>
         </Box>
-      </BackGround>
+      </Box>
       <Footer />
     </Grid>
   );

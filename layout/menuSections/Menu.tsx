@@ -129,7 +129,7 @@ export default function Menu({ passengerInfor }: any) {
     setCount(count + 1);
   };
 
-  const checkSelcet = (
+  const checkSelect = (
     menuSelect: { [x: string]: { menuSelected: { img: any }[] } },
     index: string | number,
     item: { img: any }
@@ -207,7 +207,7 @@ export default function Menu({ passengerInfor }: any) {
                           onClick={(e: any) => handleAddMenu(item, index, e)}
                           style={{
                             border:
-                              checkSelcet(menuSelect, index, item) === false
+                              checkSelect(menuSelect, index, item) === false
                                 ? 0
                                 : "3px solid #4669CD",
                           }}
@@ -215,13 +215,13 @@ export default function Menu({ passengerInfor }: any) {
                           <ImgMenu
                             src={item.img}
                             style={{
-                              opacity: checkSelcet(menuSelect, index, item)
+                              opacity: checkSelect(menuSelect, index, item)
                                 ? 0.2
                                 : 1,
                             }}
                           />
                           <ItemMenu className="Status">
-                            {checkSelcet(menuSelect, index, item)
+                            {checkSelect(menuSelect, index, item)
                               ? "Selected"
                               : ""}
                           </ItemMenu>
@@ -246,7 +246,7 @@ export default function Menu({ passengerInfor }: any) {
               justifyContent={{ xs: "center", lg: "start" }}
             >
               {data_menu.map((item) => {
-                if (item.type !== "meal") {
+                if (item.type == "drink") {
                   return (
                     <BoxMenu
                       width={{ md: "147px", xs: "40%" }}
@@ -256,7 +256,7 @@ export default function Menu({ passengerInfor }: any) {
                         onClick={(e: any) => handleAddMenu(item, index, e)}
                         style={{
                           border:
-                            checkSelcet(menuSelect, index, item) === false
+                            checkSelect(menuSelect, index, item) === false
                               ? 0
                               : "3px solid #4669CD",
                         }}
@@ -264,13 +264,13 @@ export default function Menu({ passengerInfor }: any) {
                         <ImgMenu
                           src={item.img}
                           style={{
-                            opacity: checkSelcet(menuSelect, index, item)
+                            opacity: checkSelect(menuSelect, index, item)
                               ? 0.2
                               : 1,
                           }}
                         />
                         <ItemMenu className="Status">
-                          {checkSelcet(menuSelect, index, item)
+                          {checkSelect(menuSelect, index, item)
                             ? "Selected"
                             : ""}
                         </ItemMenu>

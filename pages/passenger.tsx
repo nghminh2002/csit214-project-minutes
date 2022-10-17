@@ -17,12 +17,6 @@ import Banner from "../components/Banner";
 import Router from "next/router";
 import { StepBar } from "../components/StepBar";
 
-const BackGround = styled(Box)({
-  backgroundColor: "rgb(244,245,246)",
-  height: "100vh",
-  maxWidth: "100vw",
-});
-
 const Container = styled(Grid)({
   backgroundColor: "#FFFFFF",
   width: "85%",
@@ -186,6 +180,7 @@ function Passenger() {
   const handleSubmit = () => {
     setFormErrors(validate(formValues));
     localStorage.setItem("passenger", "done");
+    localStorage.setItem("passenger-values", JSON.stringify(formValues));
     Router.push("/seat");
   };
 
@@ -364,18 +359,16 @@ function Passenger() {
       <Header page={"BookFlight"} />
       <Banner />
       <StepBar />
-      <BackGround>
-        <PassengerHeading>Passengers</PassengerHeading>
-        <SubHeading>Fill passenger detail</SubHeading>
-        <Box>{generateForm()}</Box>
-        <Container
-          style={{ backgroundColor: "rgb(244,245,246)", height: "200px" }}
-        >
-          <NextButton variant="contained" onClick={handleSubmit}>
-            Next Step
-          </NextButton>
-        </Container>
-      </BackGround>
+      <PassengerHeading>Passengers</PassengerHeading>
+      <SubHeading>Fill passenger detail</SubHeading>
+      <Box>{generateForm()}</Box>
+      <Container
+        style={{ backgroundColor: "rgb(244,245,246)", height: "200px" }}
+      >
+        <NextButton variant="contained" onClick={handleSubmit}>
+          Next Step
+        </NextButton>
+      </Container>
       <Footer />
     </Grid>
   );
